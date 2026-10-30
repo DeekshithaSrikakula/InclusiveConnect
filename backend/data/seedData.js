@@ -1,0 +1,433 @@
+const bcrypt = require('bcryptjs');
+
+const defaultPasswordHash = bcrypt.hashSync('password123', 10);
+
+const initialOrganizations = [
+  {
+    _id: 'org_apex_mfg',
+    name: 'Apex Manufacturing & Logistics',
+    orgCode: 'APEX-101',
+    industry: 'Manufacturing & Warehouse',
+    departments: ['Warehouse Operations', 'Logistics & Dispatch', 'Assembly Floor', 'Quality Assurance', 'HR & EHS'],
+    createdAt: '2026-09-01T08:00:00.000Z'
+  },
+  {
+    _id: 'org_citycare_hosp',
+    name: 'CityCare Multi-Specialty Hospital',
+    orgCode: 'CITYCARE-202',
+    industry: 'Healthcare & Hospital',
+    departments: ['Ward Nursing', 'Sanitation & Housekeeping', 'Pharmacy & Lab', 'Hospital Administration'],
+    createdAt: '2026-09-02T08:00:00.000Z'
+  },
+  {
+    _id: 'org_gvit_campus',
+    name: 'GreenValley University Campus',
+    orgCode: 'GVIT-303',
+    industry: 'Education & Campus',
+    departments: ['Campus Transport', 'Hostel & Mess Operations', 'Campus Security', 'Registrar Office'],
+    createdAt: '2026-09-03T08:00:00.000Z'
+  }
+];
+
+const initialUsers = [
+  // ================= ORGANIZATION 1: APEX MANUFACTURING =================
+  {
+    _id: 'usr_admin_priya',
+    organizationId: 'org_apex_mfg',
+    orgCode: 'APEX-101',
+    name: 'Priya Sharma',
+    email: 'priya@apex.com',
+    employeeId: 'EMP-HR-001',
+    passwordHash: defaultPasswordHash,
+    role: 'ADMIN',
+    department: 'HR & EHS',
+    designation: 'Plant HR & Safety Officer',
+    preferredLanguage: 'en',
+    accessibilityNote: 'Administrator Console',
+    createdAt: '2026-09-01T08:00:00.000Z'
+  },
+  {
+    _id: 'usr_emp_rajesh',
+    organizationId: 'org_apex_mfg',
+    orgCode: 'APEX-101',
+    name: 'Rajesh Kumar',
+    email: 'rajesh@apex.com',
+    employeeId: 'EMP-WH-101',
+    passwordHash: defaultPasswordHash,
+    role: 'EMPLOYEE',
+    department: 'Warehouse Operations',
+    designation: 'Inventory Associate',
+    preferredLanguage: 'te',
+    accessibilityNote: 'Telugu Speaker',
+    createdAt: '2026-09-01T08:30:00.000Z'
+  },
+  {
+    _id: 'usr_emp_amit',
+    organizationId: 'org_apex_mfg',
+    orgCode: 'APEX-101',
+    name: 'Amit Verma',
+    email: 'amit@apex.com',
+    employeeId: 'EMP-LG-102',
+    passwordHash: defaultPasswordHash,
+    role: 'EMPLOYEE',
+    department: 'Logistics & Dispatch',
+    designation: 'Forklift Operator',
+    preferredLanguage: 'hi',
+    accessibilityNote: 'Hindi Speaker',
+    createdAt: '2026-09-01T09:00:00.000Z'
+  },
+  {
+    _id: 'usr_emp_karthik',
+    organizationId: 'org_apex_mfg',
+    orgCode: 'APEX-101',
+    name: 'Karthik Sundaram',
+    email: 'karthik@apex.com',
+    employeeId: 'EMP-AS-103',
+    passwordHash: defaultPasswordHash,
+    role: 'EMPLOYEE',
+    department: 'Assembly Floor',
+    designation: 'Machine Technician',
+    preferredLanguage: 'ta',
+    accessibilityNote: 'Tamil Speaker',
+    createdAt: '2026-09-01T09:15:00.000Z'
+  },
+  {
+    _id: 'usr_emp_aris',
+    organizationId: 'org_apex_mfg',
+    orgCode: 'APEX-101',
+    name: 'Aris Thorne',
+    email: 'aris@apex.com',
+    employeeId: 'EMP-QA-104',
+    passwordHash: defaultPasswordHash,
+    role: 'EMPLOYEE',
+    department: 'Quality Assurance',
+    designation: 'QA Associate',
+    preferredLanguage: 'en',
+    accessibilityNote: 'English (Plain Summary)',
+    createdAt: '2026-09-01T09:30:00.000Z'
+  },
+
+  // ================= ORGANIZATION 2: CITYCARE HOSPITAL =================
+  {
+    _id: 'usr_hosp_admin',
+    organizationId: 'org_citycare_hosp',
+    orgCode: 'CITYCARE-202',
+    name: 'Dr. Meera Nair',
+    email: 'meera@citycare.org',
+    employeeId: 'HOSP-AD-01',
+    passwordHash: defaultPasswordHash,
+    role: 'ADMIN',
+    department: 'Hospital Administration',
+    designation: 'Chief Medical Administrator',
+    preferredLanguage: 'en',
+    accessibilityNote: 'Hospital Admin',
+    createdAt: '2026-09-02T08:00:00.000Z'
+  },
+  {
+    _id: 'usr_hosp_suresh',
+    organizationId: 'org_citycare_hosp',
+    orgCode: 'CITYCARE-202',
+    name: 'Suresh Babu',
+    email: 'suresh@citycare.org',
+    employeeId: 'HOSP-HK-11',
+    passwordHash: defaultPasswordHash,
+    role: 'EMPLOYEE',
+    department: 'Sanitation & Housekeeping',
+    designation: 'Ward Sanitation Supervisor',
+    preferredLanguage: 'te',
+    accessibilityNote: 'Telugu Speaker',
+    createdAt: '2026-09-02T08:30:00.000Z'
+  },
+  {
+    _id: 'usr_hosp_kavita',
+    organizationId: 'org_citycare_hosp',
+    orgCode: 'CITYCARE-202',
+    name: 'Kavita Yadav',
+    email: 'kavita@citycare.org',
+    employeeId: 'HOSP-NR-12',
+    passwordHash: defaultPasswordHash,
+    role: 'EMPLOYEE',
+    department: 'Ward Nursing',
+    designation: 'Nursing Assistant',
+    preferredLanguage: 'hi',
+    accessibilityNote: 'Hindi Speaker',
+    createdAt: '2026-09-02T09:00:00.000Z'
+  },
+
+  // ================= ORGANIZATION 3: GREENVALLEY UNIVERSITY =================
+  {
+    _id: 'usr_uni_admin',
+    organizationId: 'org_gvit_campus',
+    orgCode: 'GVIT-303',
+    name: 'Prof. Vikram Rao',
+    email: 'registrar@gvit.edu',
+    employeeId: 'GVIT-REG-01',
+    passwordHash: defaultPasswordHash,
+    role: 'ADMIN',
+    department: 'Registrar Office',
+    designation: 'Campus Operations Registrar',
+    preferredLanguage: 'en',
+    accessibilityNote: 'Campus Admin',
+    createdAt: '2026-09-03T08:00:00.000Z'
+  },
+  {
+    _id: 'usr_uni_raju',
+    organizationId: 'org_gvit_campus',
+    orgCode: 'GVIT-303',
+    name: 'Raju Naidu',
+    email: 'raju@gvit.edu',
+    employeeId: 'GVIT-TR-21',
+    passwordHash: defaultPasswordHash,
+    role: 'EMPLOYEE',
+    department: 'Campus Transport',
+    designation: 'Senior Bus Driver',
+    preferredLanguage: 'te',
+    accessibilityNote: 'Telugu Speaker',
+    createdAt: '2026-09-03T08:30:00.000Z'
+  },
+  {
+    _id: 'usr_uni_murugan',
+    organizationId: 'org_gvit_campus',
+    orgCode: 'GVIT-303',
+    name: 'Murugan S',
+    email: 'murugan@gvit.edu',
+    employeeId: 'GVIT-SEC-22',
+    passwordHash: defaultPasswordHash,
+    role: 'EMPLOYEE',
+    department: 'Campus Security',
+    designation: 'Main Gate Security Officer',
+    preferredLanguage: 'ta',
+    accessibilityNote: 'Tamil Speaker',
+    createdAt: '2026-09-03T09:00:00.000Z'
+  }
+];
+
+const initialAnnouncements = [
+  // --- APEX MANUFACTURING ANNOUNCEMENTS ---
+  {
+    _id: 'ann_safety_001',
+    organizationId: 'org_apex_mfg',
+    title: 'Mandatory Addendum to Occupational Hazard Protocols: Lockout-Tagout (LOTO) & Gate 3 Egress Directives',
+    category: 'Safety',
+    priority: 'Urgent',
+    targetAudience: 'All Employees',
+    originalContent:
+      'Pursuant to Section 4.2 of the Enterprise Environmental Health and Safety (EHS) Regulatory Framework, all shop-floor, warehouse, and maintenance personnel are hereby mandated to immediately cease utilization of Corridor B for palletized inventory staging. Effective 06:00 HRS tomorrow, Emergency Egress Gate 3 has been designated as the primary evacuation conduit for Zone-2 personnel. Furthermore, prior to initiating any preventative or corrective maintenance on hydraulic conveyor units, technicians must execute full Lockout-Tagout (LOTO) de-energization procedures and affix personal safety padlocks.',
+    simplifiedContent:
+      '• What Changed: Emergency Exit Gate 3 is now the main fire exit for Zone-2. Do not leave boxes or pallets in Corridor B.\n• What You Must Do: Always turn off machine power and put on your safety lock (LOTO) before fixing any conveyor belt. When the fire alarm rings, go to Assembly Area B near Gate 3.\n• Who to Contact: Speak to Floor Safety Supervisor Ramesh (Ext. 104) if a pathway is blocked.',
+    keyActionRequired: 'Keep Corridor B clear of pallets and use Gate 3 during fire drills or alarms.',
+    translations: {
+      hi: {
+        title: 'आपातकालीन निकासी (गेट 3) और मशीन सुरक्षा के नए नियम',
+        simplifiedContent:
+          '• क्या बदला है: ज़ोन-2 के कर्मचारियों के लिए इमरजेंसी गेट 3 अब मुख्य बाहर निकलने का रास्ता है। कॉरिडोर B में कोई भी सामान या पैलेट न रखें।\n• आपको क्या करना है: किसी भी कन्वेयर मशीन की मरम्मत से पहले बिजली पूरी तरह बंद करें और अपना सुरक्षा ताला (LOTO) लगाएं। अलार्म बजने पर गेट 3 के पास असेंबली एरिया B में जाएं।\n• किससे संपर्क करें: यदि रास्ता बंद हो, तो तुरंत सुरक्षा सुपरवाइजर रमेश (Ext. 104) को बताएं।'
+      },
+      te: {
+        title: 'అత్యవసర ద్వారం (గేట్ 3) మరియు మిషన్ భద్రతా కొత్త నియమాలు',
+        simplifiedContent:
+          '• ఏమి మారింది: జోన్-2 ఉద్యోగులకు గేట్ 3 ఇప్పుడు ప్రధాన అత్యవసర బయటకు వెళ్లే మార్గం. కారిడార్ B లో ఎలాంటి డబ్బాలు లేదా సామాన్లు పెట్టకండి.\n• మీరు ఏమి చేయాలి: ఏదైనా కన్వేయర్ మిషన్ రిపేర్ చేసే ముందు పవర్ ఆఫ్ చేసి, మీ సేఫ్టీ లాక్ (LOTO) తప్పనిసరిగా వేయండి. అలారం మోగినప్పుడు గేట్ 3 దగ్గర ఉన్న అసెంబ్లీ ఏరియా B కి వెళ్ళండి.\n• ఎవరిని సంప్రదించాలి: దారిలో అడ్డంకులు ఉంటే సేఫ్టీ సూపర్‌వైజర్ రమేష్ (Ext. 104) కి వెంటనే చెప్పండి.'
+      },
+      ta: {
+        title: 'அவசர வெளியேறும் வழி (கேட் 3) மற்றும் இயந்திர பாதுகாப்பு விதிகள்',
+        simplifiedContent:
+          '• என்ன மாற்றம்: மண்டலம்-2 ஊழியர்களுக்கு கேட் 3 இப்போது முக்கிய அவசர வெளியேறும் வழியாகும். நடைபாதை B-ல் எந்தப் பொருட்களையும் வைக்க வேண்டாம்.\n• நீங்கள் செய்ய வேண்டியது: இயந்திரங்களை பழுதுபார்க்கும் முன் மின்சாரத்தை நிறுத்திவிட்டு பாதுகாப்பு பூட்டை (LOTO) போடவும். அலாரம் அடித்தால் கேட் 3 அருகில் உள்ள பகுதி B-க்கு செல்லவும்.\n• யாரைத் தொடர்பு கொள்ள: பாதை அடைக்கப்பட்டிருந்தால் பாதுகாப்பு மேற்பார்வையாளர் ரமேஷை (Ext. 104) அழைக்கவும்.'
+      }
+    },
+    createdBy: 'usr_admin_priya',
+    createdByName: 'Priya Sharma (HR & EHS)',
+    createdAt: '2026-09-24T09:30:00.000Z'
+  },
+  {
+    _id: 'ann_hr_002',
+    organizationId: 'org_apex_mfg',
+    title: 'Revision of Statutory Overtime Remuneration & Annual Family Medical Insurance Enrollment (FY 2026-27)',
+    category: 'HR',
+    priority: 'Normal',
+    targetAudience: 'All Employees',
+    originalContent:
+      'In accordance with the revised Industrial Compensation Charter for Fiscal Year 2026-27, overtime work hours logged beyond the standard 48-hour weekly threshold shall be compensated at 2.0x the base hourly wage rate, disbursed concurrently with the monthly payroll cycle on the 5th of each month. Additionally, the open enrollment window for the Group MediClaim Dependent Coverage Scheme commences today and terminates on the 30th of this month.',
+    simplifiedContent:
+      '• Overtime Pay Increase: Any extra hours worked above 48 hours a week will now be paid at DOUBLE (2x) your regular hourly pay on the 5th of every month.\n• Free Family Health Insurance: You can add your spouse, children, and parents to the company health insurance plan until the 30th of this month.\n• What You Must Do: Bring family Aadhaar card copies to the HR Desk (Room 102) before the 30th to register.',
+    keyActionRequired: 'Submit family Aadhaar copies at HR Desk (Room 102) before the 30th for free health insurance.',
+    translations: {
+      hi: {
+        title: 'दोगुना ओवरटाइम वेतन और परिवार स्वास्थ्य बीमा पंजीकरण',
+        simplifiedContent:
+          '• ओवरटाइम वेतन में वृद्धि: सप्ताह में 48 घंटे से अधिक काम करने पर अब आपको दोगुना (2x) वेतन मिलेगा।\n• मुफ्त परिवार स्वास्थ्य बीमा: आप इस महीने की 30 तारीख तक अपने परिवार का नाम मेडिकल बीमा में जुड़वा सकते हैं।\n• आपको क्या करना है: 30 तारीख से पहले परिवार के आधार कार्ड की कॉपी HR डेस्क (कमरा 102) में जमा करें।'
+      },
+      te: {
+        title: 'డబుల్ ఓవర్‌టైమ్ జీతం మరియు కుటుంబ ఆరోగ్య బీమా నమోదు',
+        simplifiedContent:
+          '• ఓవర్‌టైమ్ జీతం పెంపు: వారానికి 48 గంటల కంటే ఎక్కువ పనిచేస్తే ఇకపై మీకు రెట్టింపు (2x) జీతం లభిస్తుంది.\n• ఉచిత కుటుంబ ఆరోగ్య బీమా: ఈ నెల 30వ తేదీ లోపు మీ కుటుంబ సభ్యులను కంపెనీ హెల్త్ ఇన్సూరెన్స్‌లో చేర్చవచ్చు.\n• మీరు ఏమి చేయాలి: 30వ తేదీ లోపు కుటుంబ సభ్యుల ఆధార్ కార్డు కాపీలను HR డెస్క్ (రూమ్ 102) లో ఇవ్వండి.'
+      },
+      ta: {
+        title: 'இரட்டிப்பு ஓவர்டைம் ஊதியம் மற்றும் குடும்ப மருத்துவ காப்பீடு பதிவு',
+        simplifiedContent:
+          '• ஓவர்டைம் ஊதிய உயர்வு: வாரத்திற்கு 48 மணி நேரத்திற்கு மேல் செய்யும் கூடுதல் வேலைக்கு இனி இரட்டிப்பு (2x) சம்பளம் வழங்கப்படும்.\n• இலவச குடும்ப மருத்துவ காப்பீடு: இந்த மாதம் 30-ம் தேதிக்குள் உங்கள் குடும்பத்தினரை மருத்துவ காப்பீட்டில் சேர்க்கலாம்.\n• நீங்கள் செய்ய வேண்டியது: 30-ம் தேதிக்குள் குடும்பத்தினரின் ஆதார் அட்டை நகல்களை HR அலுவலகத்தில் (அறை 102) சமர்ப்பிக்கவும்.'
+      }
+    },
+    createdBy: 'usr_admin_priya',
+    createdByName: 'Priya Sharma (HR & EHS)',
+    createdAt: '2026-09-22T14:15:00.000Z'
+  },
+
+  // --- CITYCARE HOSPITAL ANNOUNCEMENTS ---
+  {
+    _id: 'ann_hosp_001',
+    organizationId: 'org_citycare_hosp',
+    title: 'Revised Bio-Medical Waste Segregation & ICU Sterilization Protocol (Infection Control Directive)',
+    category: 'Safety',
+    priority: 'Urgent',
+    targetAudience: 'All Employees',
+    originalContent:
+      'Pursuant to the National Hospital Infection Control Board guidelines, all ward sanitation and nursing personnel must strictly segregate infectious dressing materials into Yellow Bio-Hazard Liners and sharp metallic instruments into Puncture-Proof Translucent White Containers. Effective immediately, ICU Wing B will undergo ultraviolet terminal sterilization daily between 03:00 HRS and 04:00 HRS, during which non-essential entry is prohibited.',
+    simplifiedContent:
+      '• Waste Separation Rule: Put soiled bandages and cotton only in YELLOW bags. Put needles and sharp blades only in WHITE puncture-proof boxes.\n• ICU Cleaning Time: ICU Wing B will be closed for deep UV cleaning every night from 3:00 AM to 4:00 AM.\n• Who to Contact: Call Infection Control Nurse Anita (Ext. 202) before entering ICU during cleaning hours.',
+    keyActionRequired: 'Use Yellow bags for bandages, White boxes for needles, and stay clear of ICU Wing B from 3-4 AM.',
+    translations: {
+      hi: {
+        title: 'अस्पताल कचरा अलगाव और ICU सफाई के नए नियम',
+        simplifiedContent:
+          '• कचरा अलग करने का नियम: गंदी पट्टियों और रुई को केवल पीले (YELLOW) बैग में डालें। सुई और ब्लेड को केवल सफेद (WHITE) बॉक्स में डालें।\n• ICU सफाई का समय: ICU विंग B हर रात 3:00 से 4:00 बजे तक अल्ट्रावायलेट सफाई के लिए बंद रहेगा।\n• किससे संपर्क करें: किसी भी समस्या के लिए नर्स अनीता (Ext. 202) से संपर्क करें।'
+      },
+      te: {
+        title: 'ఆసుపత్రి వ్యర్థాల వేర్పాటు మరియు ICU శుభ్రపరిచే కొత్త నియమాలు',
+        simplifiedContent:
+          '• వ్యర్థాలను వేరు చేసే నియమం: వాడిన బ్యాండేజీలు మరియు దూదిని పసుపు (YELLOW) సంచులలో మాత్రమే వేయండి. సూదులు మరియు బ్లేడ్‌లను తెలుపు (WHITE) డబ్బాలలో మాత్రమే వేయండి.\n• ICU క్లీనింగ్ సమయం: ప్రతి రోజు రాత్రి 3:00 నుండి 4:00 గంటల వరకు ICU వింగ్ B శుభ్రపరచడానికి మూసివేయబడుతుంది.\n• ఎవరిని సంప్రదించాలి: సందేహాలు ఉంటే నర్స్ అనిత (Ext. 202) ని సంప్రదించండి.'
+      },
+      ta: {
+        title: 'மருத்துவக் கழிவுகள் பிரிப்பு மற்றும் ICU சுத்தம் செய்யும் விதிகள்',
+        simplifiedContent:
+          '• கழிவுப் பிரிப்பு விதி: பயன்படுத்திய பஞ்சு மற்றும் கட்டுகளை மஞ்சள் (YELLOW) பையில் மட்டுமே போடவும். ஊசிகளை வெள்ளை (WHITE) பெட்டியில் மட்டுமே போடவும்.\n• ICU சுத்தம் செய்யும் நேரம்: தினமும் இரவு 3:00 முதல் 4:00 மணி வரை ICU பிரிவு B சுத்தம் செய்யப்படுவதால் உள்ளே செல்ல வேண்டாம்.\n• யாரைத் தொடர்பு கொள்ள: சந்தேகம் இருந்தால் செவிலியர் அனிதாவை (Ext. 202) அழைக்கவும்.'
+      }
+    },
+    createdBy: 'usr_hosp_admin',
+    createdByName: 'Dr. Meera Nair (Hospital Admin)',
+    createdAt: '2026-09-25T08:00:00.000Z'
+  },
+
+  // --- GREENVALLEY UNIVERSITY ANNOUNCEMENTS ---
+  {
+    _id: 'ann_uni_001',
+    organizationId: 'org_gvit_campus',
+    title: 'Convocation Week Campus Traffic Diversion & Hostel Generator Maintenance Schedule',
+    category: 'Operations',
+    priority: 'Urgent',
+    targetAudience: 'All Employees',
+    originalContent:
+      'In view of the upcoming Annual University Convocation Ceremony on Saturday, vehicular ingress via Main Gate 1 shall be restricted exclusively to dignitary convoys. All campus transport buses and staff vehicles must utilize East Gate 4 for boarding and parking. Furthermore, scheduled preventive maintenance on the Hostel Block-C diesel backup generator will occur today from 14:00 to 16:00 HRS.',
+    simplifiedContent:
+      '• Gate Change on Saturday: Main Gate 1 is reserved for VIP guests this Saturday. All college buses and staff vehicles must enter and park through East Gate 4.\n• Generator Maintenance Today: Power backup in Hostel Block-C will be turned off for maintenance today from 2:00 PM to 4:00 PM.\n• Who to Contact: Contact Chief Security Officer at Gate 4 (Ext. 301) for parking passes.',
+    keyActionRequired: 'Use East Gate 4 for all buses on Saturday and note Hostel Block-C generator work from 2-4 PM today.',
+    translations: {
+      hi: {
+        title: 'शनिवार को गेट 4 से बस प्रवेश और हॉस्टल जनरेटर मरम्मत सूचना',
+        simplifiedContent:
+          '• शनिवार को गेट में बदलाव: इस शनिवार मुख्य गेट 1 केवल VIP अतिथियों के लिए रहेगा। सभी कॉलेज बसें और स्टाफ गाड़ियां ईस्ट गेट 4 से अंदर आएंगी।\n• आज जनरेटर की मरम्मत: आज दोपहर 2:00 बजे से शाम 4:00 बजे तक हॉस्टल ब्लॉक-C का जनरेटर मरम्मत के लिए बंद रहेगा।\n• किससे संपर्क करें: पार्किंग पास के लिए गेट 4 पर सुरक्षा अधिकारी (Ext. 301) से मिलें।'
+      },
+      te: {
+        title: 'శనివారం గేట్ 4 నుండి బస్సుల ప్రవేశం మరియు హాస్టల్ జనరేటర్ రిపేర్',
+        simplifiedContent:
+          '• శనివారం గేట్ మార్పు: ఈ శనివారం మెయిన్ గేట్ 1 VIP అతిథులకు మాత్రమే. అన్ని కాలేజీ బస్సులు మరియు సిబ్బంది వాహనాలు ఈస్ట్ గేట్ 4 నుండి మాత్రమే రావాలి.\n• నేడు జనరేటర్ రిపేర్: ఈరోజు మధ్యాహ్నం 2:00 నుండి 4:00 గంటల వరకు హాస్టల్ బ్లాక్-C జనరేటర్ రిపేర్ కోసం ఆఫ్ చేయబడుతుంది.\n• ఎవరిని సంప్రదించాలి: పార్కింగ్ పాస్ కోసం గేట్ 4 సెక్యూరిటీ ఆఫీసర్ (Ext. 301) ని సంప్రదించండి.'
+      },
+      ta: {
+        title: 'சனிக்கிழமை கேட் 4 வழியாக பேருந்துகள் அனுமதி மற்றும் விடுதி ஜெனரேட்டர் பராமரிப்பு',
+        simplifiedContent:
+          '• சனிக்கிழமை கேட் மாற்றம்: வரும் சனிக்கிழமை பிரதான கேட் 1 முக்கிய விருந்தினர்களுக்கு மட்டுமே. அனைத்து கல்லூரி பேருந்துகளும் கிழக்கு கேட் 4 வழியாக வர வேண்டும்.\n• இன்று ஜெனரேட்டர் பராமரிப்பு: இன்று மதியம் 2:00 முதல் 4:00 மணி வரை விடுதி பிளாக்-C ஜெனரேட்டர் பராமரிப்புக்காக நிறுத்தப்படும்.\n• யாரைத் தொடர்பு கொள்ள: பார்க்கிங் பாஸ் பெற கேட் 4 பாதுகாப்பு அதிகாரியை (Ext. 301) அணுகவும்.'
+      }
+    },
+    createdBy: 'usr_uni_admin',
+    createdByName: 'Prof. Vikram Rao (Registrar)',
+    createdAt: '2026-09-25T09:00:00.000Z'
+  }
+];
+
+const initialAcknowledgements = [
+  {
+    _id: 'ack_001',
+    organizationId: 'org_apex_mfg',
+    announcementId: 'ann_safety_001',
+    userId: 'usr_emp_amit',
+    userName: 'Amit Verma',
+    employeeId: 'EMP-LG-102',
+    department: 'Logistics & Dispatch',
+    languageViewed: 'hi',
+    modeViewed: 'simplified',
+    usedAudio: true,
+    acknowledgedAt: '2026-09-24T10:12:00.000Z',
+    status: 'ACKNOWLEDGED'
+  },
+  {
+    _id: 'ack_002',
+    organizationId: 'org_apex_mfg',
+    announcementId: 'ann_safety_001',
+    userId: 'usr_emp_karthik',
+    userName: 'Karthik Sundaram',
+    employeeId: 'EMP-AS-103',
+    department: 'Assembly Floor',
+    languageViewed: 'ta',
+    modeViewed: 'simplified',
+    usedAudio: false,
+    acknowledgedAt: '2026-09-24T10:45:00.000Z',
+    status: 'ACKNOWLEDGED'
+  },
+  {
+    _id: 'ack_004',
+    organizationId: 'org_apex_mfg',
+    announcementId: 'ann_hr_002',
+    userId: 'usr_emp_rajesh',
+    userName: 'Rajesh Kumar',
+    employeeId: 'EMP-WH-101',
+    department: 'Warehouse Operations',
+    languageViewed: 'te',
+    modeViewed: 'simplified',
+    usedAudio: true,
+    acknowledgedAt: '2026-09-22T16:20:00.000Z',
+    status: 'ACKNOWLEDGED'
+  },
+  {
+    _id: 'ack_hosp_1',
+    organizationId: 'org_citycare_hosp',
+    announcementId: 'ann_hosp_001',
+    userId: 'usr_hosp_kavita',
+    userName: 'Kavita Yadav',
+    employeeId: 'HOSP-NR-12',
+    department: 'Ward Nursing',
+    languageViewed: 'hi',
+    modeViewed: 'simplified',
+    usedAudio: true,
+    acknowledgedAt: '2026-09-25T09:15:00.000Z',
+    status: 'ACKNOWLEDGED'
+  }
+];
+
+const sampleDraftTemplates = [
+  {
+    id: 'tpl_chemical_safety',
+    label: 'Sample: Chemical & PPE Safety Notice',
+    title: 'Mandatory Adherence to Hazardous Solvent Containment & Respiratory PPE Directives',
+    category: 'Safety',
+    priority: 'Urgent',
+    targetAudience: 'All Employees',
+    originalContent:
+      'Effective immediately, all personnel entering Zone C are strictly required to don N95-grade Dual-Cartridge Vapor Respirators and Nitrile Chemical-Resistant Gloves prior to handling solvent drums. In the event of an accidental floor spillage exceeding 500ml, employees must refrain from manual mopping, immediately activate the Yellow Spill Alarm, and utilize the Absorbent Kit stationed at Pillar 7.'
+  },
+  {
+    id: 'tpl_festival_bonus',
+    label: 'Sample: Annual Bonus & Holiday Shift Notice',
+    title: 'Disbursement of Annual Statutory Bonus & Compensatory Holiday Roster Protocol',
+    category: 'HR',
+    priority: 'Normal',
+    targetAudience: 'All Employees',
+    originalContent:
+      'Management is pleased to announce that all full-time staff who have completed a minimum of 180 working days during the current year shall receive an 8.33% statutory bonus credited directly to their bank accounts on the 28th of this month. Personnel volunteering for essential shifts during the upcoming public holiday shall receive compensatory time-off plus a Rs. 750 special allowance.'
+  }
+];
+
+module.exports = {
+  initialOrganizations,
+  initialUsers,
+  initialAnnouncements,
+  initialAcknowledgements,
+  sampleDraftTemplates
+};
